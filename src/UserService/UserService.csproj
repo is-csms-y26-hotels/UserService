@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="Itmo.Dev.Platform.Observability" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
     </ItemGroup>
 
     <ItemGroup>
