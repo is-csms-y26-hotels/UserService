@@ -1,6 +1,7 @@
 using Itmo.Dev.Platform.Kafka.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Users.Kafka.Contracts;
 
 namespace UserService.Presentation.Kafka.Extensions;
 
@@ -10,28 +11,16 @@ public static class ServiceCollectionExtensions
         this IServiceCollection collection,
         IConfiguration configuration)
     {
-        // const string consumerKey = "Presentation:Kafka:Consumers";
-        // const string producerKey = "Presentation:Kafka:Producers";
+        const string producerKey = "Presentation:Kafka:Producers";
 
-        // TODO: add consumers and producers
-        // consumer example:
-        // .AddConsumer(b => b
-        //     .WithKey<MessageKey>()
-        //     .WithValue<MessageValue>()
-        //     .WithConfiguration(configuration.GetSection($"{consumerKey}:MessageName"))
-        //     .DeserializeKeyWithProto()
-        //     .DeserializeValueWithProto()
-        //     .HandleWith<MessageHandler>())
-        //
-        // producer example:
-        // .AddProducer(b => b
-        //     .WithKey<MessageKey>()
-        //     .WithValue<MessageValue>()
-        //     .WithConfiguration(configuration.GetSection($"{producerKey}:MessageName"))
-        //     .SerializeKeyWithProto()
-        //     .SerializeValueWithProto())
-        collection.AddPlatformKafka(builder => builder
-            .ConfigureOptions(configuration.GetSection("Presentation:Kafka")));
+        collection.AddPlatformKafka(kafka => kafka
+            .ConfigureOptions(configuration.GetSection("Presentation:Kafka"))
+            .AddProducer(b => b
+                .WithKey<UserRegistrationKey>()
+                .WithValue<UserRegistrationValue>()
+                .WithConfiguration(configuration.GetSection($"{producerKey}:UserRegistration"))
+                .SerializeKeyWithProto()
+                .SerializeValueWithProto()));
 
         return collection;
     }
