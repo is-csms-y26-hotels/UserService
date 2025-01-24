@@ -1,41 +1,49 @@
 #pragma warning disable CA1506
 
 using Itmo.Dev.Platform.Common.Extensions;
-using Itmo.Dev.Platform.Observability;
 using Itmo.Dev.Platform.Events;
+using Itmo.Dev.Platform.Observability;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using UserService.Application.Extensions;
 using UserService.Infrastructure.Persistence.Extensions;
 using UserService.Presentation.Grpc.Extensions;
 using UserService.Presentation.Kafka.Extensions;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+namespace UserService;
 
-builder.Configuration.AddUserSecrets<Program>();
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOptions<JsonSerializerSettings>();
-builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<JsonSerializerSettings>>().Value);
+        builder.Configuration.AddUserSecrets<Program>();
 
-builder.Services.AddPlatform();
-builder.AddPlatformObservability();
+        builder.Services.AddOptions<JsonSerializerSettings>();
+        builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<JsonSerializerSettings>>().Value);
 
-builder.Services.AddApplication();
-builder.Services.AddInfrastructurePersistence();
-builder.Services.AddPresentationGrpc();
-builder.Services.AddPresentationKafka(builder.Configuration);
+        builder.Services.AddPlatform();
+        builder.AddPlatformObservability();
 
+        builder.Services.AddApplication();
+        builder.Services.AddInfrastructurePersistence();
+        builder.Services.AddHostedServices();
+        builder.Services.AddPresentationGrpc();
+        builder.Services.AddPresentationKafka(builder.Configuration);
 
-builder.Services.AddPlatformEvents(b => b.AddPresentationKafkaHandlers());
+        builder.Services.AddPlatformEvents(b => b.AddPresentationKafkaHandlers());
 
-builder.Services.AddUtcDateTimeProvider();
+        builder.Services.AddUtcDateTimeProvider();
 
-WebApplication app = builder.Build();
+        WebApplication app = builder.Build();
 
-app.UseRouting();
+        app.UseRouting();
 
-app.UsePlatformObservability();
+        app.UsePlatformObservability();
 
-app.UsePresentationGrpc();
+        app.UsePresentationGrpc();
 
-await app.RunAsync();
+        app.Run();
+    }
+}
