@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Builder;
+using UserService.Presentation.Grpc.Controllers;
 
 namespace UserService.Presentation.Grpc.Extensions;
 
@@ -8,8 +9,7 @@ public static class ApplicationBuilderExtensions
     {
         builder.UseEndpoints(routeBuilder =>
         {
-            // TODO: add gRPC services implementation
-            // routeBuilder.MapGrpcService<Sample>();
+            routeBuilder.MapGrpcService<UserController>();
             routeBuilder.MapGrpcReflectionService();
         });
 
