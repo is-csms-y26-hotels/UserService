@@ -5,6 +5,7 @@ package users;
 option csharp_namespace = "Users.Kafka.Contracts";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 message UserRegistrationKey {
   int64 user_id = 1;
@@ -23,6 +24,6 @@ message UserRegistrationValue {
   string password = 4;
   google.protobuf.Timestamp birthdate = 5;
   Sex sex = 6;
-  string tel = 7;
+  google.protobuf.StringValue tel = 7;
   google.protobuf.Timestamp createdAt = 8;
 }

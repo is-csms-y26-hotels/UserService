@@ -1,5 +1,5 @@
 using Itmo.Dev.Platform.Events;
-using UserService.Application.Models;
+using UserService.Application.Models.Users;
 
 namespace UserService.Application.Contracts.Events;
 

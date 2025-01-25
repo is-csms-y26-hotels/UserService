@@ -5,6 +5,7 @@ package orders;
 option csharp_namespace = "Users.UsersService.Contracts";
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
 
 service UsersService {
   rpc Create(CreateUserRequest) returns (CreateUserResponse);
@@ -17,14 +18,14 @@ enum Sex {
 }
 
 message CreateUserRequest {
-  int64 user_id = 1;
+  google.protobuf.Int64Value user_id = 1;
   string firstName = 2;
   string lastName = 3;
   string email = 4;
   string password = 5;
   google.protobuf.Timestamp birthdate = 6;
   Sex sex = 7;
-  string tel = 8;
+  google.protobuf.StringValue tel = 8;
   google.protobuf.Timestamp createdAt = 9;
 }
 
