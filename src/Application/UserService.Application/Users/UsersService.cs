@@ -36,7 +36,7 @@ public class UsersService : IUsersService
         long userId = await _usersRepository.CreateUserAsync(user, cancellationToken);
 
         var evt = new UserRegistrationEvent(
-            request.UserId,
+            userId,
             request.FirstName,
             request.LastName,
             request.Email,

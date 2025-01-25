@@ -1,4 +1,4 @@
-using UserService.Application.Models;
+using UserService.Application.Models.Users;
 
 namespace UserService.Presentation.Grpc.Controllers.Utilities;
 

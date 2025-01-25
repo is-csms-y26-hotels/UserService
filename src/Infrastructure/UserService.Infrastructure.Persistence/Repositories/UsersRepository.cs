@@ -32,11 +32,7 @@ public class UsersRepository : IUsersRepository
                 new NpgsqlParameter("email", user.Email),
                 new NpgsqlParameter("password", user.Password),
                 new NpgsqlParameter("birthdate", user.Birthdate),
-
-                // TODO. Check if it automatically maps to db type
                 new NpgsqlParameter("sex", user.Sex),
-
-                // TODO. Check if type casting is useful
                 new NpgsqlParameter("tel", (object?)user.Tel ?? DBNull.Value),
                 new NpgsqlParameter("created_at", user.CreatedAt),
             },

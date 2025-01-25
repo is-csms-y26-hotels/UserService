@@ -1,4 +1,4 @@
-namespace UserService.Application.Models;
+namespace UserService.Application.Models.Users;
 
 public enum Sex
 {

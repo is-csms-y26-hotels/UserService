@@ -2,7 +2,7 @@ namespace UserService.Application.Models.Users;
 
 public record User
 (
-    long UserId,
+    long? UserId,
     string FirstName,
     string LastName,
     string Email,
