@@ -1,11 +1,11 @@
-using UserService.Application.Models;
+using UserService.Application.Models.Users;
 
 namespace UserService.Application.Contracts.Operations;
 
 public static class CreateUser
 {
     public readonly record struct Request(
-        long UserId,
+        long? UserId,
         string FirstName,
         string LastName,
         string Email,

@@ -6,11 +6,11 @@ using UserService.Presentation.Grpc.Controllers.Utilities;
 
 namespace UserService.Presentation.Grpc.Controllers;
 
-public class UserController : UsersService.UsersServiceBase
+public class GrpcUserController : UsersService.UsersServiceBase
 {
     private readonly IUsersService _userService;
 
-    public UserController(IUsersService userService)
+    public GrpcUserController(IUsersService userService)
     {
         _userService = userService;
     }

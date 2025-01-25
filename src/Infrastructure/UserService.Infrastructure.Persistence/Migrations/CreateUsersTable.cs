@@ -8,7 +8,7 @@ public class CreateUsersTable : Migration
     public override void Up()
     {
         Execute.Sql(@"
-            CREATE TYPE user_sex AS ENUM ('male', 'female');
+            CREATE TYPE sex AS ENUM ('unspecified', 'male', 'female');
         ");
 
         Execute.Sql(@"
@@ -19,7 +19,7 @@ public class CreateUsersTable : Migration
                 email VARCHAR(255) NOT NULL UNIQUE,
                 password VARCHAR(255) NOT NULL,
                 birthdate DATE NOT NULL,
-                sex user_sex NOT NULL,
+                sex sex NOT NULL,
                 tel VARCHAR(15),
                 created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
             );
