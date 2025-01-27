@@ -18,12 +18,5 @@ enum Sex {
 }
 
 message UserRegistrationValue {
-  string firstName = 1;
-  string lastName = 2;
-  string email = 3;
-  string password = 4;
-  google.protobuf.Timestamp birthdate = 5;
-  Sex sex = 6;
-  google.protobuf.StringValue tel = 7;
-  google.protobuf.Timestamp createdAt = 8;
+  google.protobuf.Timestamp createdAt = 2;
 }

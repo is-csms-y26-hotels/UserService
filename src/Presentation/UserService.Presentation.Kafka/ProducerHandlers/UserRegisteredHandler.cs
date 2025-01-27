@@ -2,7 +2,6 @@ using Itmo.Dev.Platform.Events;
 using Itmo.Dev.Platform.Kafka.Producer;
 using Users.Kafka.Contracts;
 using UserService.Application.Contracts.Events;
-using UserService.Presentation.Kafka.Utilities;
 
 namespace UserService.Presentation.Kafka.ProducerHandlers;
 
@@ -24,13 +23,6 @@ public class UserRegisteredHandler : IEventHandler<UserRegistrationEvent>
 
         var value = new UserRegistrationValue
         {
-            FirstName = evt.FirstName,
-            LastName = evt.LastName,
-            Email = evt.Email,
-            Password = evt.Password,
-            Birthdate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(evt.Birthdate),
-            Sex = SexEnumMapper.ToProto(evt.Sex),
-            Tel = evt.Tel,
             CreatedAt = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(evt.CreatedAt),
         };
 
