@@ -16,39 +16,49 @@ public class UsersService : IUsersService
     public UsersService(IUsersRepository usersRepository, IEventPublisher eventPublisher)
     {
         _usersRepository = usersRepository;
+
         _eventPublisher = eventPublisher;
     }
 
-    public async Task<long> CreateAsync(CreateUser.Request request, CancellationToken cancellationToken)
+    public async Task<long> CreateAsync(UserRequests.CreateUserRequest createUserRequest, CancellationToken cancellationToken)
     {
         var user = new User(
-            request.UserId,
-            request.FirstName,
-            request.LastName,
-            request.Email,
-            request.Password,
-            request.Birthdate,
-            request.Sex,
-            request.Tel,
-            request.CreatedAt);
+            createUserRequest.UserId,
+            createUserRequest.FirstName,
+            createUserRequest.LastName,
+            createUserRequest.Email,
+            createUserRequest.Password,
+            createUserRequest.Birthdate,
+            createUserRequest.Sex,
+            createUserRequest.Tel,
+            createUserRequest.CreatedAt);
 
         // TODO. Transaction over DB operation and Kafka. Use inbox/outbox?
         long userId = await _usersRepository.CreateUserAsync(user, cancellationToken);
 
         var evt = new UserRegistrationEvent(
             userId,
-            request.FirstName,
-            request.LastName,
-            request.Email,
-            request.Password,
-            request.Birthdate,
-            request.Sex,
-            request.Tel,
-            request.CreatedAt);
+            createUserRequest.FirstName,
+            createUserRequest.LastName,
+            createUserRequest.Email,
+            createUserRequest.Password,
+            createUserRequest.Birthdate,
+            createUserRequest.Sex,
+            createUserRequest.Tel,
+            createUserRequest.CreatedAt);
 
         await _eventPublisher.PublishAsync(evt, cancellationToken);
 
         // TODO. Return createdUser instead of userId?
         return userId;
+    }
+
+    public async Task<UserWithoutConfidentialFields> GetUserWithoutConfidentialFieldsAsync(
+        UserRequests.GetUserRequest request,
+        CancellationToken cancellationToken)
+    {
+        UserWithoutConfidentialFields user = await _usersRepository.GetUserWithoutConfidentialFieldsByIdAsync(request.UserId, cancellationToken);
+
+        return user;
     }
 }

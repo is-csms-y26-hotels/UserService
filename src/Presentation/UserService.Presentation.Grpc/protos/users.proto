@@ -9,12 +9,29 @@ import "google/protobuf/wrappers.proto";
 
 service UsersService {
   rpc Create(CreateUserRequest) returns (CreateUserResponse);
+
+  rpc GetUserWithoutConfidentialInfo(GetUserWithoutConfidentialInfoRequest) returns (GetUserWithoutConfidentialInfoResponse);
 }
 
 enum Sex {
   SEX_UNSPECIFIED = 0;
   SEX_MALE = 1;
   SEX_FEMALE = 2;
+}
+
+message GetUserWithoutConfidentialInfoRequest {
+  int64 user_id = 1;
+}
+
+message GetUserWithoutConfidentialInfoResponse {
+  int64 user_id = 1;
+  string firstName = 2;
+  string lastName = 3;
+  string email = 4;
+  google.protobuf.Timestamp birthdate = 5;
+  Sex sex = 6;
+  google.protobuf.StringValue tel = 7;
+  google.protobuf.Timestamp createdAt = 8;
 }
 
 message CreateUserRequest {

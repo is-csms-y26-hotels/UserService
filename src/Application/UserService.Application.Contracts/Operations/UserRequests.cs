@@ -2,9 +2,9 @@ using UserService.Application.Models.Users;
 
 namespace UserService.Application.Contracts.Operations;
 
-public static class CreateUser
+public static class UserRequests
 {
-    public readonly record struct Request(
+    public readonly record struct CreateUserRequest(
         long? UserId,
         string FirstName,
         string LastName,
@@ -14,4 +14,7 @@ public static class CreateUser
         Sex Sex,
         DateTime CreatedAt,
         string? Tel);
+
+    public readonly record struct GetUserRequest(
+        long UserId);
 }

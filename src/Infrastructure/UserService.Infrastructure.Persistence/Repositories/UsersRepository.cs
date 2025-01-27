@@ -41,4 +41,39 @@ public class UsersRepository : IUsersRepository
         object? generatedId = await command.ExecuteScalarAsync(cancellationToken);
         return Convert.ToInt64(generatedId);
     }
+
+    public async Task<UserWithoutConfidentialFields> GetUserWithoutConfidentialFieldsByIdAsync(long userId, CancellationToken cancellationToken)
+    {
+        const string sql = """
+        SELECT user_id, first_name, last_name, email, password, birthdate, sex, tel, created_at
+        FROM users
+        WHERE user_id = :user_id;
+        """;
+
+        await using NpgsqlConnection connection = await _dataSource.OpenConnectionAsync(cancellationToken);
+        await using DbCommand command = new NpgsqlCommand(sql, connection)
+        {
+            Parameters =
+            {
+                new NpgsqlParameter("user_id", userId),
+            },
+        };
+
+        await using DbDataReader reader = await command.ExecuteReaderAsync(cancellationToken);
+
+        if (await reader.ReadAsync(cancellationToken))
+        {
+            return new UserWithoutConfidentialFields(
+                reader.GetInt64(reader.GetOrdinal("user_id")),
+                reader.GetString(reader.GetOrdinal("first_name")),
+                reader.GetString(reader.GetOrdinal("last_name")),
+                reader.GetString(reader.GetOrdinal("email")),
+                reader.GetDateTime(reader.GetOrdinal("birthdate")),
+                reader.GetFieldValue<Sex>(reader.GetOrdinal("sex")),
+                reader.IsDBNull(reader.GetOrdinal("tel")) ? null : reader.GetString(reader.GetOrdinal("tel")),
+                reader.GetDateTime(reader.GetOrdinal("created_at")));
+        }
+
+        throw new Exception($"User with ID {userId} was not found.");
+    }
 }
