@@ -1,4 +1,5 @@
 using Itmo.Dev.Platform.Events;
+using System.Transactions;
 using UserService.Application.Abstractions.Persistence.Repositories;
 using UserService.Application.Contracts;
 using UserService.Application.Contracts.Events;
@@ -11,13 +12,12 @@ public class UsersService : IUsersService
 {
     private readonly IUsersRepository _usersRepository;
 
-    private readonly IEventPublisher _eventPublisher;
-
+    // private readonly IEventPublisher _eventPublisher;
     public UsersService(IUsersRepository usersRepository, IEventPublisher eventPublisher)
     {
         _usersRepository = usersRepository;
 
-        _eventPublisher = eventPublisher;
+        // _eventPublisher = eventPublisher;
     }
 
     public async Task<long> CreateAsync(UserRequests.CreateUserRequest createUserRequest, CancellationToken cancellationToken)
@@ -33,8 +33,17 @@ public class UsersService : IUsersService
             createUserRequest.Tel,
             createUserRequest.CreatedAt);
 
-        // TODO. Transaction over DB operation and Kafka. Use inbox/outbox?
+        using var transaction = new TransactionScope(
+            TransactionScopeOption.Required,
+            new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
+            TransactionScopeAsyncFlowOption.Enabled);
+        User? existingUser = await _usersRepository.GetUserByEmail(createUserRequest.Email, cancellationToken);
+        if (existingUser is not null)
+            throw new Exception($"User with email {createUserRequest.Email} already exists");
+
         long userId = await _usersRepository.CreateUserAsync(user, cancellationToken);
+
+        transaction.Complete();
 
         var evt = new UserRegistrationEvent(
             userId,
@@ -47,7 +56,7 @@ public class UsersService : IUsersService
             createUserRequest.Tel,
             createUserRequest.CreatedAt);
 
-        await _eventPublisher.PublishAsync(evt, cancellationToken);
+        // await _eventPublisher.PublishAsync(evt, cancellationToken);
 
         // TODO. Return createdUser instead of userId?
         return userId;
