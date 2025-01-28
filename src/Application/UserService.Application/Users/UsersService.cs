@@ -13,12 +13,13 @@ public class UsersService : IUsersService
 {
     private readonly IUsersRepository _usersRepository;
 
-    // private readonly IEventPublisher _eventPublisher;
+    private readonly IEventPublisher _eventPublisher;
+
     public UsersService(IUsersRepository usersRepository, IEventPublisher eventPublisher)
     {
         _usersRepository = usersRepository;
 
-        // _eventPublisher = eventPublisher;
+        _eventPublisher = eventPublisher;
     }
 
     public async Task<long> CreateAsync(UserRequests.CreateUserRequest createUserRequest, CancellationToken cancellationToken)
@@ -57,7 +58,7 @@ public class UsersService : IUsersService
             createUserRequest.Tel,
             createUserRequest.CreatedAt);
 
-        // await _eventPublisher.PublishAsync(evt, cancellationToken);
+        await _eventPublisher.PublishAsync(evt, cancellationToken);
         return userId;
     }
 
