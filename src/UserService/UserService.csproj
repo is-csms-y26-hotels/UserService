@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <ItemGroup>
+        <ProjectReference Include="..\Application\UserService.Application\UserService.Application.csproj"/>
+        <ProjectReference Include="..\Infrastructure\UserService.Infrastructure.Persistence\UserService.Infrastructure.Persistence.csproj"/>
+        <ProjectReference Include="..\Presentation\UserService.Presentation.Grpc\UserService.Presentation.Grpc.csproj"/>
+        <ProjectReference Include="..\Presentation\UserService.Presentation.Kafka\UserService.Presentation.Kafka.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Itmo.Dev.Platform.Observability" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Update="appsettings.*.json">
+            <DependentUpon>appsettings.json</DependentUpon>
+        </Content>
+    </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package users;
+
+option csharp_namespace = "Users.Kafka.Contracts";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+message UserRegistrationKey {
+  int64 user_id = 1;
+}
+
+enum Sex {
+  SEX_UNSPECIFIED = 0;
+  SEX_MALE = 1;
+  SEX_FEMALE = 2;
+}
+
+message UserRegistrationValue {
+  google.protobuf.Timestamp createdAt = 2;
+}
