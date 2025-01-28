@@ -1,6 +1,7 @@
 using Npgsql;
 using System.Data.Common;
 using UserService.Application.Abstractions.Persistence.Repositories;
+using UserService.Application.Exceptions;
 using UserService.Application.Models.Users;
 
 namespace UserService.Infrastructure.Persistence.Repositories;
@@ -74,7 +75,7 @@ public class UsersRepository : IUsersRepository
                 reader.GetDateTime(reader.GetOrdinal("created_at")));
         }
 
-        throw new Exception($"User with ID {userId} was not found.");
+        throw new UserNotFoundException($"User with ID {userId} was not found.");
     }
 
     public async Task<User?> GetUserByEmail(string email, CancellationToken cancellationToken)
@@ -83,7 +84,7 @@ public class UsersRepository : IUsersRepository
         SELECT user_id, first_name, last_name, email, password, birthdate, sex, tel, created_at
         FROM users
         WHERE email = :email;
-        """;
+    """;
 
         await using NpgsqlConnection connection = await _dataSource.OpenConnectionAsync(cancellationToken);
         await using DbCommand command = new NpgsqlCommand(sql, connection)

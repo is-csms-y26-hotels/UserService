@@ -4,6 +4,7 @@ using UserService.Application.Abstractions.Persistence.Repositories;
 using UserService.Application.Contracts;
 using UserService.Application.Contracts.Events;
 using UserService.Application.Contracts.Operations;
+using UserService.Application.Exceptions;
 using UserService.Application.Models.Users;
 
 namespace UserService.Application.Users;
@@ -39,7 +40,7 @@ public class UsersService : IUsersService
             TransactionScopeAsyncFlowOption.Enabled);
         User? existingUser = await _usersRepository.GetUserByEmail(createUserRequest.Email, cancellationToken);
         if (existingUser is not null)
-            throw new Exception($"User with email {createUserRequest.Email} already exists");
+            throw new UserAlreadyExistsException($"User with email {createUserRequest.Email} already exists");
 
         long userId = await _usersRepository.CreateUserAsync(user, cancellationToken);
 
@@ -57,8 +58,6 @@ public class UsersService : IUsersService
             createUserRequest.CreatedAt);
 
         // await _eventPublisher.PublishAsync(evt, cancellationToken);
-
-        // TODO. Return createdUser instead of userId?
         return userId;
     }
 
