@@ -32,7 +32,6 @@ public class GrpcUserController : UsersService.UsersServiceBase
             request.CreatedAt.ToDateTime(),
             request.Tel);
 
-        // TODO. Retuern User instead of id?
         long registeredUserId = await _userService.CreateAsync(applicationRequest, context.CancellationToken);
 
         var response = new CreateUserResponse
