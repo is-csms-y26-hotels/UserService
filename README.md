@@ -11,7 +11,8 @@ It handles user creation and validation while generating events for notification
 
 ## 🔗 Service Interactions  
 ### Synchronous (gRPC):  
-- **Gateway ↔ UserService** — Handles user creation requests  
+- **Gateway ↔ UserService** — Handles user creation requests
+- **NotificationEnrichmentService ↔ UserService** — Retrieves user information without confidential data  
 
 ### Asynchronous (Kafka):  
 - **`UserRegistration` topic** — Sends user registration events (for NotificationService, StatisticsService)  
