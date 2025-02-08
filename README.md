@@ -31,4 +31,7 @@ It handles user creation and validation while generating events for notification
 
 ## 👥 Team Members  
 - 🏗 **Isaev Daniil** — UserService, Gateway  
+- 🏨 **Kitaev Bogdan** — AccommodationService  
+- 📅 **Zaguta Nikita** — BookingService, NotificationEnrichmentService  
+- 📢 **Badin Roman** — NotificationService
 
